@@ -5,12 +5,9 @@ async function crawlWebsite() {
     const url = 'https://news.ycombinator.com'; 
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
-
-    console.log($)
+    
     const articles = [];
     $('tr.athing').each((index, element) => {
-    console.log(index, element)
-
         const span = $(element).find('span.titleline');
         const title = $(span).find('a').text().trim();
         const link = $(span).find('a').attr('href');

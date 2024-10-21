@@ -8,15 +8,15 @@ function createRssFeed(articles) {
         language: 'en',
     });
 
-    articles.forEach(article => {
-        feed.item({
-            title: article.title,
-            description: article.title,
-            url: article.link,
-            guid: article.link,
-            date: new Date(),
-        });
-    });
+    // articles.forEach(article => {
+    //     feed.item({
+    //         title: articles.title,
+    //         description: articles.title,
+    //         url: articles.link,
+    //         guid: articles.link,
+    //         date: new Date(),
+    //     });
+    // });
 
     return feed.xml({ indent: true });
 }
