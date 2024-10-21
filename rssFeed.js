@@ -4,7 +4,7 @@ function createRssFeed(articles) {
     const feed = new RSS({
         title: 'Hacker News',
         description: 'Latest articles from Hacker News',
-        feed_url: 'https://rss-9hn5.onrender.com/rss',
+        feed_url: 'https://rss-9hn5.onrender.com',
         site_url: 'https://news.ycombinator.com/',
         language: 'en',
     });
