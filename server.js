@@ -15,13 +15,13 @@ app.get('/', async (req, res) => {
     res.send(rssFeed);
 });
 
-// Cron job để crawl nội dung định kỳ
-cron.schedule('0 */2 * * *', async () => {
-    const articles = await crawlWebsite();
-    const rssFeed = createRssFeed(articles);
-    fs.writeFileSync('feed.xml', rssFeed);
-    console.log('Crawled new content and updated RSS feed');
-});
+// // Cron job để crawl nội dung định kỳ
+// cron.schedule('0 */2 * * *', async () => {
+//     const articles = await crawlWebsite();
+//     const rssFeed = createRssFeed(articles);
+//     fs.writeFileSync('feed.xml', rssFeed);
+//     console.log('Crawled new content and updated RSS feed');
+// });
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
