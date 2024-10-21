@@ -7,11 +7,10 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-// Đường dẫn để truy cập RSS feed
-app.get('/rss', async (req, res) => {
+app.get('/', async (req, res) => {
     const articles = await crawlWebsite();
     const rssFeed = createRssFeed(articles);
-    fs.writeFileSync('feed.xml', rssFeed); // Lưu feed vào file
+    fs.writeFileSync('feed.xml', rssFeed); 
     res.set('Content-Type', 'application/rss+xml');
     res.send(rssFeed);
 });
