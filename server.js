@@ -3,6 +3,7 @@ const crawlWebsite = require('./crawler');
 const createRssFeed = require('./rssFeed');
 const cron = require('node-cron');
 const fs = require('fs');
+const RSS = require('rss');
 
 const app = express();
 const PORT = 3001;
@@ -14,7 +15,6 @@ const PORT = 3001;
 //     res.set('Content-Type', 'application/rss+xml');
 //     res.send(rssFeed);
 // });
-
 app.get('/', async (req, res) => {
     const response = await fetch('https://community.lexinfocus.com/api/52831/sign-in',{
         method: 'POST',
@@ -26,7 +26,6 @@ app.get('/', async (req, res) => {
             password: 'hieuha2801',
         }),
     });
-
     
     const loginJson = await response.json();
 
@@ -38,8 +37,26 @@ app.get('/', async (req, res) => {
         },
     });
     const feed = await getFeed.json();
-    const authFeeds = feed.threads.filter((item) => item.author?.uid == loginJson?.user?.id);
-    res.json(authFeeds);
+    const authFeeds = feed.threads.filter((item) => item.author_id == loginJson?.user?.id);
+    
+    const rss = new RSS({
+        title: 'Your Feed Title',
+        description: 'Your Feed Description',
+        // feed_url: 'https://yourdomain.com/rss',
+        // site_url: 'https://yourdomain.com',
+        language: 'en',
+    });
+    authFeeds.forEach(item => {
+        rss.item({
+            title: item.title,
+            description: item.description,
+            guid: item.id,
+            previewImage: item.previewImage || '' 
+        });
+    });
+    
+    res.set('Content-Type', 'application/rss+xml');
+    res.send(rss.xml());
 });
 
 // // Cron job để crawl nội dung định kỳ
