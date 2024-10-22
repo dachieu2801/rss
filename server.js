@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {
         },
     });
     const feed = await getFeed.json();
-    const authFeeds = feed.threads.filter((item) => item.author_id == 14066)//loginJson?.user?.id);
+    const authFeeds = feed.threads//.filter((item) => item.author_id )//loginJson?.user?.id);
     
     const rss = new RSS({
         title: 'Your Feed Title',
