@@ -2,10 +2,8 @@ const RSS = require('rss');
 
 function createRssFeed(articles) {
     const feed = new RSS({
-        title: 'Hacker News',
-        description: 'Latest articles from Hacker News',
-        site_url: 'https://news.ycombinator.com/',
-        language: 'en',
+        title: 'News',
+        description: 'Latest articles from News',
     });
 
     // articles.forEach(article => {
