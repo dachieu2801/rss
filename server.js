@@ -8,13 +8,6 @@ const RSS = require('rss');
 const app = express();
 const PORT = 3001;
 
-// app.get('/', async (req, res) => {
-//     const articles = await crawlWebsite();
-//     const rssFeed = createRssFeed(articles);
-//     fs.writeFileSync('feed.xml', rssFeed); 
-//     res.set('Content-Type', 'application/rss+xml');
-//     res.send(rssFeed);
-// });
 app.get('/', async (req, res) => {
     const response = await fetch('https://community.lexinfocus.com/api/52831/sign-in',{
         method: 'POST',
@@ -51,21 +44,13 @@ app.get('/', async (req, res) => {
             title: item.title,
             description: item.description,
             guid: item.id,
-            previewImage: item.previewImage || '' 
+            url: item.previewImage || '' 
         });
     });
     
     res.set('Content-Type', 'application/rss+xml');
     res.send(rss.xml());
 });
-
-// // Cron job để crawl nội dung định kỳ
-// cron.schedule('0 */2 * * *', async () => {
-//     const articles = await crawlWebsite();
-//     const rssFeed = createRssFeed(articles);
-//     fs.writeFileSync('feed.xml', rssFeed);
-//     console.log('Crawled new content and updated RSS feed');
-// });
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
