@@ -24,5 +24,5 @@ function createRssFeed(articles) {
 
     return feed.xml({ indent: true });
 }
-
+ 
 module.exports = createRssFeed;
