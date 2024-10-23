@@ -6,7 +6,7 @@ function createRssFeed(articles) {
         description: 'Latest articles from Forum',
         feed_url: 'https://example.com/rss.xml',
         site_url: 'https://example.com',
-        pubDate: description //new Date().toUTCString()
+        pubDate: new Date().toUTCString()
     });
 
     articles.forEach(article => {
