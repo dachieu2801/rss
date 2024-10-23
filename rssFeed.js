@@ -10,7 +10,7 @@ function createRssFeed(articles) {
     });
 
     articles.forEach(article => {
-        
+        const updateTimestamp = new Date(article.update_timestamp._seconds * 1000 + article.update_timestamp._nanoseconds / 1000000);
         feed.item({
             guid: article.id,
             title: article.title,
