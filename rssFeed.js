@@ -14,7 +14,7 @@ function createRssFeed(articles) {
         feed.item({
             guid: article.id,
             title: article.title,
-            content: article.description,
+            description: article.description,
             enclosure: {
                 url: article.previewImage,
             },
