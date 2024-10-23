@@ -1,5 +1,4 @@
 const express = require('express');
-const crawlWebsite = require('./crawler');
 const createRssFeed = require('./rssFeed');
 const cron = require('node-cron');
 const fs = require('fs');
