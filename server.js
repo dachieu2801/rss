@@ -42,7 +42,7 @@ app.get('/', async (req, res) => {
     authFeeds.forEach(item => {
         rss.item({
             title: item.title,
-            description: item.description.str.substring(0, 100) + '...',
+            description: item.description.substring(0, 100) + '...',
             guid: item.id,
             url: item.previewImage || '' 
         });
