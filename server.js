@@ -30,26 +30,12 @@ app.get('/', async (req, res) => {
         },
     });
     const feed = await getFeed.json();
-    const authFeeds = feed.threads//.filter((item) => item.author_id )//loginJson?.user?.id);
+    const authFeeds = feed.threads
     
-    const rss = new RSS({
-        title: 'Your Feed Title',
-        description: 'Your Feed Description',
-        // feed_url: 'https://yourdomain.com/rss',
-        // site_url: 'https://yourdomain.com',
-        language: 'en',
-    });
-    authFeeds.forEach(item => {
-        rss.item({
-            title: item.title,
-            description: item.description,
-            guid: item.id,
-            url: item.previewImage || '' 
-        });
-    });
-    
+    const rssFeed = createRssFeed(authFeeds);
+
     res.set('Content-Type', 'application/rss+xml');
-    res.send(rss.xml());
+    res.send(rssFeed);
 });
 
 app.listen(PORT, () => {
