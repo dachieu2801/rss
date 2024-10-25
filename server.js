@@ -52,6 +52,9 @@ app.get('/', async (req, res) => {
     res.send(rss.xml());
 });
 
+//apikey js5emaahufb4hzstxut2ni69z4wxmk4e
+//campaint id: jSb2F
+//fromFieldId: zXTFR, zX48q
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
