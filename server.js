@@ -44,7 +44,8 @@ app.get('/', async (req, res) => {
             title: item.title,
             description: item.description.substring(0, 100) + '...',
             guid: item.id,
-            url: 'https://community.lexinfocus.com',
+            link: 'https://community.lexinfocus.com',
+            pubDate: new Date(), 
         });
     });
     
