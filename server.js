@@ -44,7 +44,8 @@ app.get('/', async (req, res) => {
             title: item.title,
             description: item.description.substring(0, 100) + '...',
             guid: item.id,
-            url: item.previewImage || '' 
+            // url: item.previewImage || '' ,
+            link: `https://community.lexinfocus.com/threads/${item.id}`,
         });
     });
     
@@ -52,6 +53,9 @@ app.get('/', async (req, res) => {
     res.send(rss.xml());
 });
 
+//apikey js5emaahufb4hzstxut2ni69z4wxmk4e
+//campaint id: jSb2F
+//fromFieldId: zXTFR, zX48q
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
