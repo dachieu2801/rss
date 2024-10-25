@@ -45,7 +45,6 @@ app.get('/', async (req, res) => {
             description: article.description.substring(0, 100) + '...',
             guid: article.id,
             url: 'https://community.lexinfocus.com',
-            pubDate: article.timestamp,
         });
     });
     
