@@ -43,9 +43,8 @@ app.get('/', async (req, res) => {
         rss.item({
             title: item.title,
             description: item.description.substring(0, 100) + '...',
-            guid: item.id,
-            // url: item.previewImage || '' ,
-            link: `https://community.lexinfocus.com/threads/${item.id}`,
+            // guid: item.id,
+            // url: item.previewImage || '' 
         });
     });
     
