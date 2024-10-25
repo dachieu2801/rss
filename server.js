@@ -40,14 +40,12 @@ app.get('/', async (req, res) => {
         language: 'en',
     });
     authFeeds.forEach(article => {
-        const updateTimestamp = new Date(article.update_timestamp._seconds * 1000 + article.update_timestamp._nanoseconds / 1000000);
-
         rss.item({
             title: article.title,
             description: article.description.substring(0, 100) + '...',
             guid: article.id,
             url: 'https://community.lexinfocus.com',
-            pubDate: updateTimestamp.toUTCString(),
+            pubDate: article.timestamp,
         });
     });
     
