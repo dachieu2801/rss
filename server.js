@@ -35,7 +35,6 @@ const loadSettings = async () => {
 };
 loadSettings();
 
-
 //style
 const buttonStyle =`
     button {
@@ -211,9 +210,7 @@ app.post('/verify-password', (req, res) => {
     }
 })
 
-
-
-// Route to handle login form submission
+// Route to handle passwordApp form submission
 app.post('/passwordApp', (req, res) => {
     const { password } = req.body;
     const hashedInput = crypto.createHash('sha256').update(password).digest('hex');
