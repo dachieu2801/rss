@@ -38,26 +38,26 @@ loadSettings();
 
 //style
 const buttonStyle =`
-button {
-    width: 100%;
-    padding: 0.5rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-button:hover {background-color: #0056b3;}
+    button {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    button:hover {background-color: #0056b3;}
 `
 const inputStyle = `
-input{
-                    width: 100%;
-                    padding: 0.5rem;
-                    margin: 0.5rem 0;
-                    border: 1px solid #ddd;
-                    border-radius: 4px;
-                }
+    input{
+        width: 100%;
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+   }
 `
 
 // Middleware to track requests and check limit
@@ -89,7 +89,31 @@ const limitMiddleware = (req, res, next) => {
     settings.requestCount += 1;
     next();
 };
-
+// Middleware to check if user is authenticated
+const requireAuth = (req, res, next) => {
+    if (req.session.isAuthenticated) {
+        return next();
+    }
+    res.send(`
+        <html>
+            <head><title>Password App</title>
+            <style>
+                ${buttonStyle}
+                ${inputStyle}
+            </style>
+            </head>
+            <body style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+                <div>
+                    <h2>Điền mật khẩu app để có thể sử dụng tính năng này</h2>
+                    <form method="POST" action="/passwordApp">
+                        <input type="password" name="password" placeholder="Enter password" required />
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </body>
+        </html>
+    `);
+};
 
 app.get('/rss-feeds', limitMiddleware, async (req, res) => {
     try {
@@ -187,31 +211,7 @@ app.post('/verify-password', (req, res) => {
     }
 })
 
-// Middleware to check if user is authenticated
-const requireAuth = (req, res, next) => {
-    if (req.session.isAuthenticated) {
-        return next();
-    }
-    res.send(`
-        <html>
-            <head><title>Password App</title>
-            <style>
-                ${buttonStyle}
-                ${inputStyle}
-            </style>
-            </head>
-            <body style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
-                <div>
-                    <h2>Điền mật khẩu app để có thể sử dụng tính năng này</h2>
-                    <form method="POST" action="/passwordApp">
-                        <input type="password" name="password" placeholder="Enter password" required />
-                        <button type="submit">Submit</button>
-                    </form>
-                </div>
-            </body>
-        </html>
-    `);
-};
+
 
 // Route to handle login form submission
 app.post('/passwordApp', (req, res) => {
