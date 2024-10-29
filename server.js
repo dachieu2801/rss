@@ -86,6 +86,7 @@ const limitMiddleware = (req, res, next) => {
         `);
     }
     settings.requestCount += 1;
+    console.log(`Request count: ${settings.requestCount}`);
     next();
 };
 // Middleware to check if user is authenticated
