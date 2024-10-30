@@ -107,7 +107,7 @@ const header = `
     </style>
     <header>
        <div id="logo" style ="display: flex; align-items: center; margin-left: 8px; cursor: pointer;">
-            <img src="/assets/logo.jpg" alt="Logo">
+            <img src="/assets/logo.png" alt="Logo">
             <span>NotifyHub 1.0</span>
        </div>
     </header>
@@ -199,6 +199,7 @@ app.get('/login', async (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>NotifyHub 1.0</title>
+
             <style>
                 ${mainStyle}
                 ${layoutStyle}
@@ -221,11 +222,12 @@ app.get('/login', async (req, res) => {
                         <div style="color:red; margin-top:12px;" id="message"></div>
                         ${progress}
                     </div>
-
+                    <div style="display: none;" id="isFirstLogin">${settings.isFirstLogin}</div>
                 </div>
             </body>
             <script>
                 const message = document.querySelector('#message');
+                const isFirstLogin = document.querySelector('#isFirstLogin');
                 document.querySelector('#submit').addEventListener('click', async (event) => {
                     event.preventDefault();
                     const username = document.querySelector('#username').value;
@@ -233,12 +235,13 @@ app.get('/login', async (req, res) => {
                     if(!username.trim() || !password.trim()){
                         message.innerHTML = 'Please enter username and password';
                         return
+                    } 
+                    if(isFirstLogin.innerHTML == '1') {
+                        if(!password.trim().includes('@lexinfocus')) {
+                            message.innerHTML = 'Incorrect username or password, please try again';
+                            return
+                        }
                     }
-                    // const validPassword = username + '@lexinfocus'
-                    // if(password != validPassword){
-                    //     message.innerHTML = 'Incorrect username or password, please try again';
-                    //     return
-                    // }
                     const response = await fetch('/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -265,7 +268,7 @@ app.get('/login', async (req, res) => {
                             }
                         }, 6);
                         setTimeout(() => {
-                            window.location.href = '/';
+                            window.location.href = '/change-password';
                         },3006)
                     }else{
                         message.innerHTML = 'Incorrect username or password, please try again';
@@ -278,16 +281,38 @@ app.get('/login', async (req, res) => {
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    const hashePasswordInput = crypto.createHash('sha256').update(password).digest('hex');
-    if (hashePasswordInput == settings.passwordApp && username == settings.username) {
+    const hashePasswordInput = crypto.createHash('sha256').update(password.trim()).digest('hex');
+    if(settings.isFirstLogin == 1) {
+        settings = {
+            ...settings,
+            username: username.trim(),
+            passwordApp: hashePasswordInput,
+            isFirstLogin: 0
+        }
+        fs.writeFile(filePath, JSON.stringify({
+            ...settings,
+        }, null, 2), (writeErr) => {
+            if (writeErr) {
+                console.error(writeErr);
+                res.status(500).send('Error saving data');
+            }
+        });
+        
         req.session.isAuthenticated = true;
         res.json({
             success: true
         });
-    } else {
-        res.json({
-            success: false
-        });
+    } else  {
+        if (hashePasswordInput == settings.passwordApp && username.trim() == settings.username) {
+            req.session.isAuthenticated = true;
+            res.json({
+                success: true
+            });
+        } else {
+            res.json({
+                success: false
+            });
+        }
     }
 });
 
@@ -619,12 +644,9 @@ app.post('/admin',requireAuth, async (req, res) => {
     } catch (e) {
         return res.json({
             success: false,
-            message: 'Something went wrong with link, try again!'
+            message: 'Something wrong with the link, try again!'
         })
     }
-
-
-
 
 });
 
