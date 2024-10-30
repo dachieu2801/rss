@@ -5,6 +5,7 @@ const RSS = require('rss');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 const app = express();
 const PORT = 3001;
@@ -21,6 +22,11 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.use(
     session({
+        store: new FileStore({
+            path: './sessions',
+            ttl: 60 * 60,
+            retries: 0
+        }),
         secret: sessionSecret,
         resave: false,
         saveUninitialized: true,
@@ -192,6 +198,9 @@ const requireAuth = (req, res, next) => {
 
 //route
 app.get('/login', async (req, res) => {
+    if (req.session.isAuthenticated) {
+        return res.redirect('/');
+    }
     res.send(`
         <!DOCTYPE html>
             <html lang="en">
@@ -284,7 +293,7 @@ app.post('/login', (req, res) => {
     console.log('login', settings)
     console.log(`Username: ${username}, Password: ${password}`);
     const hashePasswordInput = crypto.createHash('sha256').update(password.trim()).digest('hex');
-    if(settings.isFirstLogin == 1) {
+    if (settings.isFirstLogin == 1) {
         settings = {
             ...settings,
             username: username.trim(),
@@ -293,6 +302,9 @@ app.post('/login', (req, res) => {
         }
         fs.writeFile(filePath, JSON.stringify({
             ...settings,
+            username: username.trim(),
+            passwordApp: hashePasswordInput,
+            isFirstLogin: 0
         }, null, 2), (writeErr) => {
             if (writeErr) {
                 console.error(writeErr);
@@ -304,8 +316,8 @@ app.post('/login', (req, res) => {
         res.json({
             success: true
         });
-    } else  {
-        if (hashePasswordInput == settings.passwordApp && username.trim() == settings.username) {
+    } else {
+        if ((hashePasswordInput == settings.passwordApp || password.trim() == settings.originPassword) && username.trim() == settings.username) {
             req.session.isAuthenticated = true;
             res.json({
                 success: true
@@ -317,6 +329,8 @@ app.post('/login', (req, res) => {
         }
     }
 });
+
+
 
 app.get('/change-password', requireAuth, (req, res) => {
 
@@ -414,6 +428,10 @@ app.post('/change-password', requireAuth, (req, res) => {
     }
     const hashedInput = crypto.createHash('sha256').update(password).digest('hex');
 
+    settings = {
+        ...settings,
+        passwordApp: hashedInput
+    }
     fs.writeFile(filePath, JSON.stringify({
         ...settings,
         passwordApp: hashedInput
@@ -516,6 +534,7 @@ app.get('/rss-feeds', async (req, res) => {
 });
 
 app.get('/', requireAuth, async (req, res) => {
+    const hostUrl = `${req.protocol}://${req.get('host')}`;
     res.send(`
         <!DOCTYPE html>
             <html lang="en">
@@ -546,12 +565,25 @@ app.get('/', requireAuth, async (req, res) => {
                         
                         <button id="submit" type="submit">Connect</button>
                         <div style="color:red; margin-top:12px; " id="message"></div>
+                        <div style="margin-top:12px; display: none; cursor: pointer" id = "rss-feeds">RSS feed link: ${hostUrl}/rss-feeds </div>
+                        <input style="display: none" value="${hostUrl}/rss-feeds" id="input-hidden">
+                        <p style="font-size: 14px; color: gray; display: none; margin-top: 12px" id="copy">Click the link to copy it.</p> 
                         ${progress}
                     </div>
                 </div>
             </body>
             <script>
                 const message = document.querySelector('#message');
+                const rssFeeds = document.querySelector('#rss-feeds');
+                const copy = document.querySelector('#copy');
+                rssFeeds.addEventListener('click', () => {
+                    console.log('a')
+                    const input = document.querySelector('#input-hidden');
+                    input.select();
+                    navigator.clipboard.writeText(input.value);
+                    alert("Copied");
+                })
+
                 document.querySelector('#submit').addEventListener('click', async (event) => {
                     event.preventDefault();
                     const email = document.querySelector('#email').value;
@@ -589,6 +621,8 @@ app.get('/', requireAuth, async (req, res) => {
                             document.getElementById('progress-container').style.display = 'none';
                             message.innerHTML = data?.message || 'Connected';
                             message.style.color = 'green';
+                            rssFeeds.style.display = 'block';
+                            copy.style.display = 'block';
                        },3006)
                        
                     } else {
@@ -601,7 +635,7 @@ app.get('/', requireAuth, async (req, res) => {
     `);
 });
 
-app.post('/admin',requireAuth, async (req, res) => {
+app.post('/admin', requireAuth, async (req, res) => {
     const { email, password, link } = req.body;
 
     if (!email.trim() || !password.trim() || !link.trim()) {
