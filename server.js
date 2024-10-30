@@ -65,7 +65,6 @@ const layoutStyle = `
         margin-bottom: 5px;
     }
 `
-
 const buttonStyle = `
     button {
         display: block;
@@ -107,9 +106,17 @@ const header = `
         }
     </style>
     <header>
-        <img src="/assets/logo.jpg" alt="Logo">
-        <span>NotifyHub 1.0</span>
+       <div id="logo" style ="display: flex; align-items: center; margin-left: 8px; cursor: pointer;">
+            <img src="/assets/logo.jpg" alt="Logo">
+            <span>NotifyHub 1.0</span>
+       </div>
     </header>
+    <script>
+        const header = document.querySelector('#logo');
+        header.addEventListener('click', () => {
+            window.location.href = '/';
+        })
+    </script>
 `
 const progress = `
     <style>
@@ -284,7 +291,6 @@ app.post('/login', (req, res) => {
     }
 });
 
-// requireAuth
 app.get('/change-password', requireAuth, (req, res) => {
 
     res.send(`
@@ -306,6 +312,10 @@ app.get('/change-password', requireAuth, (req, res) => {
                 <div class="container">
                     ${header}
                     <div class="content">
+                        <h2 style="width: 350px; margin-bottom: 20px;text-align: center">
+                            Would you like to change your password ?
+                        </h2>
+
                         <label for="password">New Password</label>
                         <input type="text" id="password" name="password">
                         
@@ -360,6 +370,7 @@ app.get('/change-password', requireAuth, (req, res) => {
         </html>
     `)
 });
+
 app.post('/change-password', requireAuth, (req, res) => {
     const { password, repassword } = req.body;
     if (!password.trim()) {
@@ -391,7 +402,6 @@ app.post('/change-password', requireAuth, (req, res) => {
 
 })
 
-// limitMiddleware,
 app.get('/rss-feeds', async (req, res) => {
     try {
         if (!settings || !settings.email || !settings.password || !settings.url_community) {
