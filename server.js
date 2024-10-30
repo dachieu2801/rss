@@ -281,6 +281,8 @@ app.get('/login', async (req, res) => {
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
+    console.log('login', settings)
+    console.log(`Username: ${username}, Password: ${password}`);
     const hashePasswordInput = crypto.createHash('sha256').update(password.trim()).digest('hex');
     if(settings.isFirstLogin == 1) {
         settings = {
@@ -297,7 +299,7 @@ app.post('/login', (req, res) => {
                 res.status(500).send('Error saving data');
             }
         });
-        
+
         req.session.isAuthenticated = true;
         res.json({
             success: true
@@ -428,6 +430,7 @@ app.post('/change-password', requireAuth, (req, res) => {
 })
 
 app.get('/rss-feeds', async (req, res) => {
+    console.log('rsss', settings)
     try {
         if (!settings || !settings.email || !settings.password || !settings.url_community) {
             throw new Error('Missing email or password or url community');
