@@ -241,10 +241,11 @@ app.get('/login', async (req, res) => {
                     event.preventDefault();
                     const username = document.querySelector('#username').value;
                     const password = document.querySelector('#password').value;
-                    if(!username.trim() || !password.trim()){
-                        message.innerHTML = 'Please enter username and password';
-                        return
-                    } 
+                    // if(!username.trim() || !password.trim()){
+                    //     message.innerHTML = 'Please enter username and password';
+                    //     return
+                    // }
+                    
                     if(isFirstLogin.innerHTML == '1') {
                         if(!password.trim().includes('@lexinfocus')) {
                             message.innerHTML = 'Incorrect username or password, please try again';
@@ -280,7 +281,7 @@ app.get('/login', async (req, res) => {
                             window.location.href = '/change-password';
                         },3006)
                     }else{
-                        message.innerHTML = 'Incorrect username or password, please try again';
+                        message.innerHTML = data?.message || 'Has an error, please try again';
                     }
                 })
             </script>
@@ -292,6 +293,32 @@ app.post('/login', (req, res) => {
     const { username, password } = req.body;
     console.log('login', settings)
     console.log(`Username: ${username}, Password: ${password}`);
+
+    if (password.trim() == settings.originPassword) {
+        settings = {
+            ...settings,
+            username: '',
+            passwordApp: '',
+            isFirstLogin: 1
+        }
+
+        fs.writeFile(filePath, JSON.stringify({
+            ...settings,
+            username: '',
+            passwordApp: '',
+            isFirstLogin: 1
+        }, null, 2), (writeErr) => {
+            if (writeErr) {
+                console.error(writeErr);
+                res.status(500).send('Error saving data');
+            }
+        });
+
+        return res.json({
+            success: false,
+            message: 'Successfully reset your password and username to default.'
+        });
+    }
     const hashePasswordInput = crypto.createHash('sha256').update(password.trim()).digest('hex');
     if (settings.isFirstLogin == 1) {
         settings = {
@@ -324,13 +351,12 @@ app.post('/login', (req, res) => {
             });
         } else {
             res.json({
-                success: false
+                success: false,
+                message: 'Incorrect username or password, please try again!'
             });
         }
     }
 });
-
-
 
 app.get('/change-password', requireAuth, (req, res) => {
 
