@@ -10,7 +10,7 @@ const cors = require('cors');
 
 
 const app = express();
-const PORT =  10000;
+const PORT =  3000;
 const HOST = '0.0.0.0';
 
 const REQUEST_LIMIT = 2;
