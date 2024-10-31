@@ -264,12 +264,12 @@ app.get('/login', async (req, res) => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username, password })
                     });
-                    if (!response.ok) {
-                        console.log(JSON.stringify(response))
-                        message.innerHTML = 'Something went wrong, try again!';
-                        message.style.color = 'red';
-                        return
-                    }
+                    // if (!response.ok) {
+                    //     console.log(JSON.stringify(response))
+                    //     message.innerHTML = 'Something went wrong, try again!';
+                    //     message.style.color = 'red';
+                    //     return
+                    // }
                     const data = await response.json();
                     if(data && data.success){
                         message.innerHTML = '';
@@ -436,12 +436,12 @@ app.get('/change-password', requireAuth, (req, res) => {
                         body: JSON.stringify({ repassword, password })
                     });
 
-                    if(!response.oke){
-                        console.log(JSON.stringify(response))
-                        message.innerHTML = 'Something went wrong, try again!';
-                        message.style.color = 'red';
-                        return
-                    }
+                    // if(!response.ok){
+                    //     console.log(JSON.stringify(response))
+                    //     message.innerHTML = 'Something went wrong, try again!';
+                    //     message.style.color = 'red';
+                    //     return
+                    // }
                     const data = await response.json();
                     if(data && data.success){
                         message.innerHTML = 'Your password has been changed successfully!';
@@ -654,12 +654,12 @@ app.get('/', requireAuth, async (req, res) => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email, password,  link }),
                     });
-                    if (!response.ok) {
-                        console.log(JSON.stringify(response))
-                        message.innerHTML = 'Something went wrong, try again!';
-                        message.style.color = 'red';
-                        return
-                    }
+                    // if (!response.ok) {
+                    //     console.log(JSON.stringify(response))
+                    //     message.innerHTML = 'Something went wrong, try again!';
+                    //     message.style.color = 'red';
+                    //     return
+                    // }
                     const data = await response.json();
                     if(data && data.success === true){
                         message.innerHTML = '';
