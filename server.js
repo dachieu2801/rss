@@ -258,6 +258,7 @@ app.get('/login', async (req, res) => {
                         body: JSON.stringify({ username, password })
                     });
                     if (!response.ok) {
+                        console.log(JSON.stringify(response))
                         message.innerHTML = 'Something went wrong, try again!';
                     }
                     const data = await response.json();
@@ -422,6 +423,8 @@ app.get('/change-password', requireAuth, (req, res) => {
                     });
 
                     if(!response.oke){
+                        console.log(JSON.stringify(response))
+
                         message.innerHTML = 'Something went wrong, try again!';
                     }
                     const data = await response.json();
@@ -489,6 +492,8 @@ app.get('/rss-feeds', async (req, res) => {
         });
 
         if (!response.ok) {
+            console.log('rss  route', JSON.stringify(response))
+
             throw new Error(`Login failed: ${response.statusText}`);
         }
 
@@ -629,6 +634,7 @@ app.get('/', requireAuth, async (req, res) => {
                         body: JSON.stringify({ email, password,  link }),
                     });
                     if (!response.ok) {
+                        console.log(JSON.stringify(response))
                         message.innerHTML = 'Something went wrong, try again!';
                     }
                     const data = await response.json();
@@ -681,6 +687,8 @@ app.post('/admin', requireAuth, async (req, res) => {
         });
 
         if (!response.ok) {
+            console.log('admin route',JSON.stringify(response))
+
             return res.status(400).json({
                 success: false,
                 message: 'Incorrect email or password, please try again!'
