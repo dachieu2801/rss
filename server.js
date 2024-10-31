@@ -228,7 +228,7 @@ app.get('/login', async (req, res) => {
                         <input type="password" id="password" name="password">
                         
                         <button id="submit" type="submit">Sign in</button>
-                        <div style="color:red; margin-top:12px;" id="message"></div>
+                        <div style="margin-top:12px;" id="message"></div>
                         ${progress}
                     </div>
                     <div style="display: none;" id="isFirstLogin">${settings.isFirstLogin}</div>
@@ -243,12 +243,14 @@ app.get('/login', async (req, res) => {
                     const password = document.querySelector('#password').value;
                     if(!username.trim() || !password.trim()){
                         message.innerHTML = 'Please enter username and password';
+                        message.style.color = 'red';
                         return
                     }
                     
                     if(isFirstLogin.innerHTML == '1') {
                         if(!password.trim().includes('@lexinfocus')) {
                             message.innerHTML = 'Incorrect username or password, please try again';
+                            message.style.color = 'red';
                             return
                         }
                     }
@@ -260,10 +262,13 @@ app.get('/login', async (req, res) => {
                     if (!response.ok) {
                         console.log(JSON.stringify(response))
                         message.innerHTML = 'Something went wrong, try again!';
+                        message.style.color = 'red';
+                        return
                     }
                     const data = await response.json();
                     if(data && data.success){
                         message.innerHTML = '';
+                        message.style.color = 'black';
                         document.getElementById('progress-container').style.display = 'block';
                         let progress = 0;
                         const progressFill = document.getElementById('progress-fill');
@@ -283,6 +288,8 @@ app.get('/login', async (req, res) => {
                         },3006)
                     }else{
                         message.innerHTML = data?.message || 'Has an error, please try again';
+                        message.style.color = 'red';
+                        return
                     }
                 })
             </script>
@@ -393,7 +400,7 @@ app.get('/change-password', requireAuth, (req, res) => {
                             <button id="submit" type="submit">Submit</button>
                             <button id="next" >Next</button>
                         </div>
-                        <div style="color:red; margin-top:12px;" id="message"></div>
+                        <div style="margin-top:12px;" id="message"></div>
                         ${progress}
                     </div>
 
@@ -410,10 +417,12 @@ app.get('/change-password', requireAuth, (req, res) => {
                     const repassword = document.querySelector('#repassword').value;
                     if(!password.trim() || !repassword.trim()){
                         message.innerHTML = 'Please enter password';
+                        message.style.color = 'red';
                         return
                     }
                     if(password.trim() != repassword.trim()){
                         message.innerHTML = 'Passwords mismatch, try again!';
+                        message.style.color = 'red';
                         return
                     }
                     const response = await fetch('/change-password', {
@@ -424,8 +433,9 @@ app.get('/change-password', requireAuth, (req, res) => {
 
                     if(!response.oke){
                         console.log(JSON.stringify(response))
-
                         message.innerHTML = 'Something went wrong, try again!';
+                        message.style.color = 'red';
+                        return
                     }
                     const data = await response.json();
                     if(data && data.success){
@@ -433,6 +443,8 @@ app.get('/change-password', requireAuth, (req, res) => {
                         message.style.color = 'green';  
                     }else{
                         message.innerHTML = 'Passwords mismatch, try again!';
+                        message.style.color = 'red';
+                        return
                     }
                     
                 })
@@ -598,7 +610,7 @@ app.get('/', requireAuth, async (req, res) => {
                         <input type="text" value="${settings.url_community}" id="link" name="link">
                         
                         <button id="submit" type="submit">Connect</button>
-                        <div style="color:red; margin-top:12px; " id="message"></div>
+                        <div style="margin-top:12px; " id="message"></div>
                         <div style="margin-top:12px; display: none; cursor: pointer" id = "rss-feeds">RSS feed link: ${hostUrl}/rss-feeds </div>
                         <input style="display: none" value="${hostUrl}/rss-feeds" id="input-hidden">
                         <p style="font-size: 14px; color: gray; display: none; margin-top: 12px" id="copy">Click the link to copy it.</p> 
@@ -625,6 +637,7 @@ app.get('/', requireAuth, async (req, res) => {
                     const link = document.querySelector('#link').value;
                     if(!email.trim() || !password.trim() || !link.trim()){
                         message.innerHTML = 'Please enter all fields';
+                        message.style.color = 'red';
                         return
                     }
 
@@ -636,10 +649,13 @@ app.get('/', requireAuth, async (req, res) => {
                     if (!response.ok) {
                         console.log(JSON.stringify(response))
                         message.innerHTML = 'Something went wrong, try again!';
+                        message.style.color = 'red';
+                        return
                     }
                     const data = await response.json();
                     if(data && data.success === true){
                         message.innerHTML = '';
+                        message.style.color = 'black';
                         document.getElementById('progress-container').style.display = 'block';
                         let progress = 0;
                         const progressFill = document.getElementById('progress-fill');
