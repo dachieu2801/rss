@@ -438,11 +438,12 @@ app.get('/change-password', requireAuth, (req, res) => {
                     });
 
                     // if(!response.ok){
-                        console.log((response))
+                        // console.log((response.))
                     //     message.innerHTML = 'Something went wrong, try again!';
                     //     message.style.color = 'red';
                     //     return
                     // }
+                    
                     const data = await response.json();
                     if(data && data.success){
                         message.innerHTML = 'Your password has been changed successfully!';
