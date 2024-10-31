@@ -266,7 +266,7 @@ app.get('/login', async (req, res) => {
                         body: JSON.stringify({ username, password })
                     });
                     // if (!response.ok) {
-                    //     console.log(JSON.stringify(response))
+                        console.log((response))
                     //     message.innerHTML = 'Something went wrong, try again!';
                     //     message.style.color = 'red';
                     //     return
@@ -438,7 +438,7 @@ app.get('/change-password', requireAuth, (req, res) => {
                     });
 
                     // if(!response.ok){
-                    //     console.log(JSON.stringify(response))
+                        console.log((response))
                     //     message.innerHTML = 'Something went wrong, try again!';
                     //     message.style.color = 'red';
                     //     return
@@ -656,7 +656,7 @@ app.get('/', requireAuth, async (req, res) => {
                         body: JSON.stringify({ email, password,  link }),
                     });
                     // if (!response.ok) {
-                    //     console.log(JSON.stringify(response))
+                        console.log((response))
                     //     message.innerHTML = 'Something went wrong, try again!';
                     //     message.style.color = 'red';
                     //     return
