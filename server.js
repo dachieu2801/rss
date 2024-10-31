@@ -440,7 +440,7 @@ app.get('/change-password', requireAuth, (req, res) => {
 
 app.post('/change-password', requireAuth, (req, res) => {
     const { password, repassword } = req.body;
-    console.log('change-password', settings)
+    console.log('change-password 1', settings)
     if (!password.trim()) {
         return res.json({
             success: false,
@@ -468,6 +468,8 @@ app.post('/change-password', requireAuth, (req, res) => {
             return res.status(500).send('Error saving data');
         }
     });
+    console.log('change-password 2 ', settings)
+
     return res.json({
         success: true
     })
@@ -664,7 +666,7 @@ app.get('/', requireAuth, async (req, res) => {
 
 app.post('/admin', requireAuth, async (req, res) => {
     const { email, password, link } = req.body;
-
+   console.log('admin-------email,pass,link', email, password, link)
     if (!email.trim() || !password.trim() || !link.trim()) {
         return res.json({
             success: false,
@@ -701,11 +703,14 @@ app.post('/admin', requireAuth, async (req, res) => {
                 return res.status(500).send('Error saving data');
             }
         });
+        console.log('returning')
+
         return res.json({
             success: true,
             message: 'Connected'
         })
     } catch (e) {
+        console.log('admin route',e)
         return res.json({
             success: false,
             message: 'Something wrong with the link, try again!'
