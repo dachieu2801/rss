@@ -440,6 +440,7 @@ app.get('/change-password', requireAuth, (req, res) => {
 
 app.post('/change-password', requireAuth, (req, res) => {
     const { password, repassword } = req.body;
+    console.log('change-password', settings)
     if (!password.trim()) {
         return res.json({
             success: false,
