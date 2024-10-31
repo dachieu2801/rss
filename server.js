@@ -632,6 +632,9 @@ app.get('/', requireAuth, async (req, res) => {
 
                 document.querySelector('#submit').addEventListener('click', async (event) => {
                     event.preventDefault();
+                    rssFeeds.style.display = 'none';
+                    copy.style.display = 'none';
+                    message.innerHTML = 'Please wait...';
                     const email = document.querySelector('#email').value;
                     const password = document.querySelector('#password').value;
                     const link = document.querySelector('#link').value;
