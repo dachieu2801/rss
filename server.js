@@ -460,6 +460,17 @@ app.get('/change-password', requireAuth, (req, res) => {
     `)
 });
 
+app.post('/logout', requireAuth, (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error logging out');
+        } else {
+            res.status(200).send('Logged out successfully');
+        }
+    });
+})
+
 app.post('/change-password', requireAuth, (req, res) => {
     const { password, repassword } = req.body;
     console.log('change-password 1', settings)
