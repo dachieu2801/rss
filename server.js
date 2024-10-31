@@ -33,7 +33,7 @@ app.use(
         cookie: { maxAge: 600000 * 60 }
     })
 );
-const filePath = path.join(__dirname, 'admin.json');
+const filePath = path.join(__dirname, 'db','admin.json');
 
 const loadSettings = async () => {
     const setting = fs.readFileSync(filePath, 'utf8');
