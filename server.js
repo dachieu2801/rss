@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+const cors = require('cors');
+
 
 const app = express();
 const PORT = 3001;
@@ -15,6 +17,9 @@ let email = "ankhieu322@gmail.com"
 
 let settings = {};
 let sessionSecret = "Ki8fXkvYneOaVoRb"
+
+// Cấu hình CORS
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
