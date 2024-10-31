@@ -322,7 +322,7 @@ app.post('/login', (req, res) => {
     //         }
     //     });
 
-    //     return res.json({
+    //     return res.status(200).json({
     //         success: false,
     //         message: 'Successfully reset your password and username to default.'
     //     });
@@ -348,17 +348,17 @@ app.post('/login', (req, res) => {
         });
 
         req.session.isAuthenticated = true;
-        res.json({
+        res.status(200).json({
             success: true
         });
     } else {
         if ((hashePasswordInput == settings.passwordApp || password.trim() == settings.originPassword) && username.trim() == settings.username) {
             req.session.isAuthenticated = true;
-            res.json({
+            res.status(200).json({
                 success: true
             });
         } else {
-            res.json({
+            res.status(200).json({
                 success: false,
                 message: 'Incorrect username or password, please try again!'
             });
@@ -457,13 +457,13 @@ app.post('/change-password', requireAuth, (req, res) => {
     const { password, repassword } = req.body;
     console.log('change-password 1', settings)
     if (!password.trim()) {
-        return res.json({
+        return res.status(200).json({
             success: false,
             message: 'Please enter password'
         })
     }
     if (password != repassword) {
-        return res.json({
+        return res.status(200).json({
             success: false,
             message: 'Passwords mismatch, try again!'
         })
@@ -485,7 +485,7 @@ app.post('/change-password', requireAuth, (req, res) => {
     });
     console.log('change-password 2 ', settings)
 
-    return res.json({
+    return res.status(200).json({
         success: true
     })
 
@@ -693,7 +693,7 @@ app.post('/admin', requireAuth, async (req, res) => {
     const { email, password, link } = req.body;
    console.log('admin-------email,pass,link', email, password, link)
     if (!email.trim() || !password.trim() || !link.trim()) {
-        return res.json({
+        return res.status(200).json({
             success: false,
             message: 'Please enter all fields'
         })
@@ -732,13 +732,13 @@ app.post('/admin', requireAuth, async (req, res) => {
         });
         console.log('returning')
 
-        return res.json({
+        return res.status(200).json({
             success: true,
             message: 'Connected'
         })
     } catch (e) {
         console.log('admin route',e)
-        return res.json({
+        return res.status(200).json({
             success: false,
             message: 'Something wrong with the link, try again!'
         })
