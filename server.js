@@ -241,10 +241,10 @@ app.get('/login', async (req, res) => {
                     event.preventDefault();
                     const username = document.querySelector('#username').value;
                     const password = document.querySelector('#password').value;
-                    // if(!username.trim() || !password.trim()){
-                    //     message.innerHTML = 'Please enter username and password';
-                    //     return
-                    // }
+                    if(!username.trim() || !password.trim()){
+                        message.innerHTML = 'Please enter username and password';
+                        return
+                    }
                     
                     if(isFirstLogin.innerHTML == '1') {
                         if(!password.trim().includes('@lexinfocus')) {
