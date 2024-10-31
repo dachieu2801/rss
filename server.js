@@ -278,6 +278,7 @@ app.get('/login', async (req, res) => {
                         document.getElementById('progress-container').style.display = 'block';
                         let progress = 0;
                         const progressFill = document.getElementById('progress-fill');
+                        progressFill.style.width = progress + '%';
                         
                         const interval = setInterval(() => {
                             if (progress >= 100) {
@@ -678,8 +679,8 @@ app.get('/', requireAuth, async (req, res) => {
                         message.innerHTML = '';
                         message.style.color = 'black';
                         document.getElementById('progress-container').style.display = 'block';
-                        let progress = 0;
                         const progressFill = document.getElementById('progress-fill');
+                        let progress = 0;
                         progressFill.style.width = progress + '%';
                         const interval = setInterval(() => {
                             if (progress >= 100) {
