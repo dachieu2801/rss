@@ -294,31 +294,31 @@ app.post('/login', (req, res) => {
     console.log('login', settings)
     console.log(`Username: ${username}, Password: ${password}`);
 
-    if (password.trim() == settings.originPassword) {
-        settings = {
-            ...settings,
-            username: '',
-            passwordApp: '',
-            isFirstLogin: 1
-        }
+    // if (password.trim() == settings.originPassword) {
+    //     settings = {
+    //         ...settings,
+    //         username: '',
+    //         passwordApp: '',
+    //         isFirstLogin: 1
+    //     }
 
-        fs.writeFile(filePath, JSON.stringify({
-            ...settings,
-            username: '',
-            passwordApp: '',
-            isFirstLogin: 1
-        }, null, 2), (writeErr) => {
-            if (writeErr) {
-                console.error(writeErr);
-                res.status(500).send('Error saving data');
-            }
-        });
+    //     fs.writeFile(filePath, JSON.stringify({
+    //         ...settings,
+    //         username: '',
+    //         passwordApp: '',
+    //         isFirstLogin: 1
+    //     }, null, 2), (writeErr) => {
+    //         if (writeErr) {
+    //             console.error(writeErr);
+    //             res.status(500).send('Error saving data');
+    //         }
+    //     });
 
-        return res.json({
-            success: false,
-            message: 'Successfully reset your password and username to default.'
-        });
-    }
+    //     return res.json({
+    //         success: false,
+    //         message: 'Successfully reset your password and username to default.'
+    //     });
+    // }
     const hashePasswordInput = crypto.createHash('sha256').update(password.trim()).digest('hex');
     if (settings.isFirstLogin == 1) {
         settings = {
