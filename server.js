@@ -201,7 +201,7 @@ app.get('/login', async (req, res) => {
     if (req.session.isAuthenticated) {
         return res.redirect('/');
     }
-    res.send(`
+    res.status(200).send(`
         <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -368,7 +368,7 @@ app.post('/login', (req, res) => {
 
 app.get('/change-password', requireAuth, (req, res) => {
 
-    res.send(`
+    res.status(200).send(`
         <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -542,10 +542,10 @@ app.get('/rss-feeds', async (req, res) => {
         });
 
         res.set('Content-Type', 'application/rss+xml');
-        res.send(rss.xml());
+        res.status(200).send(rss.xml());
 
     } catch (error) {
-        res.send(`
+        res.status(200).send(`
             <html>
                 <head>
                     <title>Error</title>
@@ -581,7 +581,7 @@ app.get('/rss-feeds', async (req, res) => {
 
 app.get('/', requireAuth, async (req, res) => {
     const hostUrl = `${req.protocol}://${req.get('host')}`;
-    res.send(`
+    res.status(200).send(`
         <!DOCTYPE html>
             <html lang="en">
             <head>
