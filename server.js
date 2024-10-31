@@ -10,7 +10,8 @@ const cors = require('cors');
 
 
 const app = express();
-const PORT = 3001;
+const PORT =  10000;
+const HOST = '0.0.0.0';
 
 const REQUEST_LIMIT = 2;
 let email = "ankhieu322@gmail.com"
@@ -751,6 +752,9 @@ app.post('/admin', requireAuth, async (req, res) => {
 
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+const server = app.listen(PORT, HOST, () => {
+    console.log(`Máy chủ đang chạy tại http://localhost:${PORT}/`);
 });
+
+server.keepAliveTimeout = 120000; 
+server.headersTimeout = 120000;
